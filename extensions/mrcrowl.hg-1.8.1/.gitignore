@@ -1,0 +1,8 @@
+node_modules
+out*/**
+*.vsix
+.vscodeignore
+.vscode-test
+*.xcf
+images/production
+test/sandbox
