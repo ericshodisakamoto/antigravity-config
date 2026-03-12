@@ -1,0 +1,298 @@
+{
+	"name": "seito-openfile",
+	"displayName": "Open file",
+	"description": "Extract a filepath from the current cursor position and open the file",
+	"version": "2.3.3",
+	"publisher": "Fr43nk",
+	"engines": {
+		"vscode": "^1.104.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"icon": "programicon-2x.png",
+	"galleryBanner": {
+		"theme": "dark",
+		"color": "#782121"
+	},
+	"homepage": "https://www.seito.de/software/seito-openfile/",
+	"bugs": {
+		"url": "https://gitlab.com/fr43nk/seito-openfile/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://gitlab.com/fr43nk/seito-openfile.git"
+	},
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./dist/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "seito-openfile.openFileFromText",
+				"category": "File",
+				"title": "Open file under cursor"
+			},
+			{
+				"command": "seito-openfile.openFileFromTextBeside",
+				"category": "File",
+				"title": "Open file under cursor in editor beside active"
+			},
+			{
+				"command": "seito-openfile.openFileExternFromText",
+				"category": "File",
+				"title": "Open file in default application under cursor"
+			},
+			{
+				"command": "seito-openfile.openFileLikeThisFile",
+				"category": "File",
+				"title": "Open file like this file"
+			},
+			{
+				"command": "seito-openfile.openFolderOfThisFile",
+				"category": "File",
+				"title": "Open folder of file"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "seito-openfile.openFileFromText",
+				"key": "alt+p",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "seito-openfile.openFileExternFromText",
+				"key": "ctrl+alt+p",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "seito-openfile.openFileLikeThisFile",
+				"key": "alt+q"
+			}
+		],
+		"submenus": [
+			{
+				"id": "seito.openfile.submenu.0",
+				"label": "Open file"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "seito-openfile.openFileFromText",
+					"when": "seito-openfile:enabled"
+				},
+				{
+					"command": "seito-openfile.openFileFromTextBeside",
+					"when": "seito-openfile:enabled"
+				},
+				{
+					"command": "seito-openfile.openFileExternFromText",
+					"when": "seito-openfile:enabled"
+				},
+				{
+					"command": "seito-openfile.openFolderOfThisFile",
+					"when": "seito-openfile:enabled"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "seito-openfile.openFileFromText",
+					"when": "editorTextFocus && !inOutput && seito-openfile:enabled",
+					"group": "navigation@5"
+				},
+				{
+					"submenu": "seito.openfile.submenu.0",
+					"group": "navigation@6",
+					"when": "editorTextFocus && !inOutput && seito-openfile:enabled"
+				}
+			],
+			"seito.openfile.submenu.0": [
+				{
+					"command": "seito-openfile.openFileExternFromText",
+					"when": "editorTextFocus && !inOutput && seito-openfile:enabled",
+					"group": "navigation@1"
+				},
+				{
+					"command": "seito-openfile.openFileFromTextBeside",
+					"when": "editorTextFocus && !inOutput && seito-openfile:enabled",
+					"group": "navigation@2"
+				},
+				{
+					"command": "seito-openfile.openFileLikeThisFile",
+					"when": "editorTextFocus && !inOutput && seito-openfile:enabled",
+					"group": "navigation@3"
+				},
+				{
+					"command": "seito-openfile.openFolderOfThisFile",
+					"when": "editorTextFocus && !inOutput && seito-openfile:enabled",
+					"group": "navigation@4"
+				}
+			]
+		},
+		"configuration": {
+			"title": "Open file configurations",
+			"properties": {
+				"seito-openfile.wordbound": {
+					"type": "string",
+					"default": "[\\s\\\"\\'\\>\\<#;?{}]",
+					"description": "The RegExp to define the bound of the path string"
+				},
+				"seito-openfile.lookupTildePathAlsoFromWorkspace": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to lookup path string which start with '~' relative to workspace if not found at user's home."
+				},
+				"seito-openfile.defaultLinuxOpenCommand": {
+					"type": "string",
+					"default": "xdg-open",
+					"description": "Linux: Sets the default command to open a file with its associated application."
+				},
+				"seito-openfile.preferOpenFile": {
+					"type": "boolean",
+					"default": "true",
+					"description": "If a file without suffix and a folder are named the same in the same location prefer open the file."
+				},
+				"seito-openfile.extensions": {
+					"type": "array",
+					"default": [],
+					"description": "Known suffixes to look for when file string has no suffix (Deprecated. Default to search with current document's suffix if path in text has no extension)"
+				},
+				"seito-openfile.extraExtensionsForTypes": {
+					"type": "array",
+					"default": [
+						{
+							"name": "js",
+							"suffixes": [
+								"jsx"
+							]
+						},
+						{
+							"name": "jsx",
+							"suffixes": [
+								"js"
+							]
+						},
+						{
+							"name": "ts",
+							"suffixes": [
+								"js",
+								"jsx"
+							]
+						},
+						{
+							"name": "vue",
+							"suffixes": [
+								"js",
+								"jsx"
+							]
+						},
+						{
+							"name": "c",
+							"suffixes": [
+								"h"
+							]
+						},
+						{
+							"name": "cpp",
+							"suffixes": [
+								"h",
+								"hpp"
+							]
+						},
+						{
+							"name": "m",
+							"suffixes": [
+								"h"
+							]
+						},
+						{
+							"name": "mm",
+							"suffixes": [
+								"h",
+								"hpp"
+							]
+						}
+					],
+					"description": "Known suffixes to look for when file string has no suffix, according to current document's type. (suffix match is relative to current document's parent folders only)"
+				},
+				"seito-openfile.searchSubFoldersOfWorkspaceFolders": {
+					"type": "array",
+					"default": [
+						"lib*/",
+						"lib*/*/",
+						"src/",
+						"src/*/",
+						"app/",
+						"app/*/",
+						"class?(es)/",
+						"class?(es)/*/",
+						"module?(s)/",
+						"inc*/",
+						"vendor?(s)/",
+						"vendor?(s)/*/",
+						"public/"
+					],
+					"description": "Patterns of sub-folders under workspace folder(s) to be searched at second last, for relative paths.  For syntax reference glob-all/minimatch"
+				},
+				"seito-openfile.searchPaths": {
+					"type": "array",
+					"default": [],
+					"description": "Paths to be added to search at last, for relative paths"
+				},
+				"seito-openfile.leadingPathMapping": {
+					"type": "object",
+					"default": {},
+					"description": "Rewrite leading path segments to another path, like {\"source/path\": \"target/path\"}.  Both source and target paths must be full match of single or multiple folder levels.  E.g. if want '@/' to mean relative to workspace, you may write {\"@\": \"\"} to remove the '@' folder level.  Also support ending wildcard '*', like {\"@*\": \"*\"}.  Later value has higher precedence.  Be care any mistake of this setting can cause unexpected file open failures."
+				},
+				"seito-openfile.notFoundTriggerQuickOpen": {
+					"type": "boolean",
+					"default": true,
+					"description": "When enabled, if (a sole) file is not found by the normal logic, trigger VS Code's Quick Open input box for further search."
+				},
+				"seito-openfile.openNewTab": {
+					"type": "boolean",
+					"default": false,
+					"description": "Open a file in a new tab. Keeps the unmodified file open."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"webpack": "webpack --mode development",
+		"webpack-dev": "webpack --mode development --watch",
+		"package": "webpack --mode production --devtool hidden-source-map",
+		"compile": "webpack --mode production && npm run test-compile",
+		"test-compile": "tsc -p ./",
+		"test": "vscode-test",
+		"lint": "eslint src",
+		"watch-tests": "tsc -p . -w --outDir out"
+	},
+	"devDependencies": {
+		"@types/glob": "^8.1.0",
+		"@types/mocha": "^10.0.9",
+		"@types/node": "^22.9.0",
+		"@types/vscode": "^1.104.0",
+		"@typescript-eslint/eslint-plugin": "^8.13.0",
+		"@typescript-eslint/parser": "^8.13.0",
+		"@vscode/test-cli": "^0.0.10",
+		"@vscode/test-electron": "^2.4.1",
+		"eslint": "^9.14.0",
+		"mocha": "^11.0.1",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.7.3",
+		"webpack": "^5.104.1",
+		"webpack-cli": "^6.0.1"
+	},
+	"dependencies": {
+		"glob": "^11.0.0",
+		"true-case-path": "^2.2.1"
+	},
+	"__metadata": {
+		"installedTimestamp": 1773274831228,
+		"targetPlatform": "undefined",
+		"size": 232435
+	}
+}
